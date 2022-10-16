@@ -5,81 +5,76 @@ import argparse
 import time
 import threading
 
-ground_id = {
-    1: "1298272433186332673",
-    2: "1298272520994086913",
-    3: "1298272615009411073",
-    4: "1298272709167341570",
-    5: "1298272791098875905",
-    6: "1298273087183183874",
-    7: "1298273175146127362",
-    8: "1298273265650819073",
-    9: "1298273399927267330",
-    10: "1298273500317933570"
-}
-
-event = threading.Event()
-
 def get_config():
     with open("./post.json", "r") as f:
-        config = json.loads(f.read())
+        text = json.loads(f.read())
+    config, start_time, end_time = text["config"], text["start_time"], text["end_time"]
     config["order_time"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    return config
+    return config, start_time, end_time
 
-def post_reservation(config, id:int):
-    url = "http://reservation.ruichengyunqin.com/api/blade-app/qywx/saveOrder?userid=" + config["student_id"]
-    p_data = {
-        "userNum":config["num_people"],
-        "customerEmail":"",
-        "gymId":"1297443858304540673",
-        "gymName":"润杨羽毛球馆",
-        "groundId":ground_id[id],
-        "groundType":"0",
-        "messagePushType":"0",
-        "isIllegal":"0",
-        "orderDate":config["order_time"],
-        "startTime":config["start_time"],
-        "endTime":config["end_time"],
-        "tmpOrderDate":config["order_time"],
-        "tmpStartTime":config["start_time"],
-        "tmpEndTime":config["end_time"]
+class ReThreading():
+    def __init__(self, start_time, end_time) -> None:
+        self.start_time = start_time
+        self.end_time = end_time
+        self.is_success = False
+
+    def post_reservation(self, config, id:int):
+        url = "http://reservation.ruichengyunqin.com/api/blade-app/qywx/saveOrder?userid=" + config["student_id"]
+        p_data = {
+            "userNum":config["num_people"],
+            "customerEmail":"",
+            "gymId":"1297443858304540673",
+            "gymName":"润杨羽毛球馆",
+            "groundId":config["ground_id"][str(id)],
+            "groundType":"0",
+            "messagePushType":"0",
+            "isIllegal":"0",
+            "orderDate":config["order_time"],
+            "startTime":self.start_time,
+            "endTime":self.end_time,
+            "tmpOrderDate":config["order_time"],
+            "tmpStartTime":self.start_time,
+            "tmpEndTime":self.end_time
         }
-    if event.is_set():
-        print("已经预定成功，无需预定！")
-        return
-    re = requests.post(url, data=json.dumps(p_data), headers={"Content-Type": "application/json"})
-    re = json.loads(re.text)
-    if re["success"]:
-        event.set()
-        print(str(id)+"号场地预定成功！")
-    else:
-        print(str(id)+"号场地预定失败！")
-
-def post_threading():
-    for i in range(len(ground_id)):
-        t = threading.Thread(target=post_reservation, args=(config, i+1))
-        t.start()
-        time.sleep(0.2)
+        if self.is_success:
+            print("已经预定成功，无需预定！")
+            return
+        re = requests.post(url, data=json.dumps(p_data), headers={"Content-Type": "application/json"})
+        re = json.loads(re.text)
+        if re["success"]:
+            self.is_success = True
+            print(str(id)+"号场地预定成功！", "时间："+self.start_time+"  -  "+self.end_time)
+        else:
+            print(str(id)+"号场地预定失败! ", "时间："+self.start_time+"  -  "+self.end_time, " 原因："+re["msg"])
+        
+    def post_threading(self, config):
+        for i in range(len(config["ground_id"])):
+            t = threading.Thread(target=self.post_reservation, args=(config, i+1))
+            t.start()
+            time.sleep(0.1)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='羽毛球场馆预定')
     parser.add_argument('re_type', type=int, help="模式选择参数: 0-固定时间模式, 1-手动回车模式")
     args = parser.parse_args()
 
-    config = get_config()
+    config, start_time, end_time = get_config()
+    rethreadings = [ReThreading(i,j) for i,j in zip(start_time, end_time)]
+
     print("开始预定:", "固定时间模式" if args.re_type==0 else "手动回车模式")
     while True:
         if args.re_type == 1:
             print("==================按一次回车，预定一次========================")
             input()
-            post_threading()
+            for rethreading in rethreadings:
+                rethreading.post_threading(config)
         else: 
             now_time = datetime.datetime.now()
-            delta_time = datetime.datetime.strptime(config["set_time"],"%Y-%m-%d %H:%M:%S") - now_time
-            print("==================距离设定时间还有: %s========================" %(delta_time))
-            if delta_time.seconds < 5: # 如果与设定时间小于5s，开抢
-                post_threading()
-            else: # 否则每一秒查询一次
+            set_time = datetime.datetime.strptime(config["set_time"],"%Y-%m-%d %H:%M:%S")
+            print("==================距离设定时间还有: %s========================" %(set_time-now_time))
+            if (set_time-now_time).seconds<=10 or (now_time-set_time).seconds<=20: # 到达设定时间，时间范围为30s
+                for rethreading in rethreadings:
+                    rethreading.post_threading(config)
                 time.sleep(1)
-        if event.is_set():
-            break
+            elif now_time<set_time and (set_time-now_time).seconds > 5: # 没到时间，每1s查询一次
+                time.sleep(1)
