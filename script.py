@@ -6,7 +6,7 @@ import time
 import threading
 
 def get_config():
-    with open("./post_me.json", "r") as f:
+    with open("./post.json", "r") as f:
         text = json.loads(f.read())
     config, start_time, end_time = text["config"], text["start_time"], text["end_time"]
     config["order_time"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
