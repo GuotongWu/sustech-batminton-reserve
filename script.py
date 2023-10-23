@@ -7,7 +7,7 @@ import time
 
 
 def get_config():
-    with open("./post.json", "r") as f:
+    with open("./post.json", "r", encoding='utf-8') as f:
         text = json.loads(f.read())
     config, start_time, end_time, user_agents = text["config"], text["start_time"], text["end_time"], text[
         "user_agents"]
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
     if args.re_type == 1:
         print(
-            f"预定信息: customerName={config['customerName']}, student_id={config['student_id']}, customer_tel={config['customer_tel']}")
+            f"预定信息: customerName={config['customer_name']}, student_id={config['student_id']}, customer_tel={config['customer_tel']}")
         print("==================按一次回车，开始预定========================")
         input()
         time_difference = 0

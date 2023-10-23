@@ -1,9 +1,9 @@
 {
     "config":{
         "customer_name": "XXXXXXXX",
-        "student_id": "XXXXXXXX", 
+        "student_id": "XXXXXXXX",
         "num_people": "4",
-        "set_time": "2023-10-22 12:06:30",
+        "set_time": "2023-10-23 20:00:00",
         "customer_tel": "XXXXXXXX",
         "ground_id": {
             "1": "1298272433186332673",
@@ -19,26 +19,14 @@
         }
     },
     "start_time": [
-        "2023-10-29 20:30:00",
-        "2023-10-29 19:00:00",
-        "2023-10-29 17:30:00",
-        "2023-10-29 08:00:00",
-        "2023-10-29 09:30:00",
-        "2023-10-29 11:00:00"],
+        "2023-10-31 18:00:00",
+        "2023-10-31 18:30:00",
+        "2023-10-31 19:30:00"],
     "end_time": [
-        "2023-10-29 22:00:00",
-        "2023-10-29 20:30:00",
-        "2023-10-29 19:00:00",
-        "2023-10-29 09:30:00",
-        "2023-10-29 11:00:00",
-        "2023-10-29 12:30:00"],
+        "2023-10-31 19:00:00",
+        "2023-10-31 19:30:00",
+        "2023-10-31 20:00:00"],
     "user_agents":[
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 15_9 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 wxwork/4.1.10 MicroMessenger/7.0.1 Language/en ColorScheme/Dark",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 wxwork/4.1.10 MicroMessenger/7.0.1 Language/en ColorScheme/Dark",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 15_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E147 wxwork/4.1.10 MicroMessenger/7.0.0 Language/en ColorScheme/Dark",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 15_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E146 wxwork/4.1.10 MicroMessenger/6.9.9 Language/en ColorScheme/Dark",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E146 wxwork/4.1.10 MicroMessenger/6.9.9 Language/en ColorScheme/Dark",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E146 wxwork/4.1.10 MicroMessenger/6.9.9 Language/en ColorScheme/Dark",
     "Mozilla/5.0 (iPhone; CPU iPhone OS 15_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E146 wxwork/4.1.10 MicroMessenger/6.9.9 Language/en ColorScheme/Dark",
     "Mozilla/5.0 (iPhone; CPU iPhone OS 15_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E145 wxwork/4.1.10 MicroMessenger/6.9.8 Language/en ColorScheme/Dark",
     "Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E145 wxwork/4.1.10 MicroMessenger/6.9.8 Language/en ColorScheme/Dark"]
