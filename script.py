@@ -64,6 +64,7 @@ class Reservation():
         ground_ids = list(config["ground_id"].keys())
         random.shuffle(ground_ids)
         for ground_id in ground_ids:
+            time.sleep(random.uniform(1, 2))
             self.post_reservation(config, int(ground_id))
             time.sleep(random.uniform(1, 1.3))
 
@@ -80,7 +81,7 @@ if __name__ == "__main__":
 
     print("开始预定:", "固定时间模式" if args.re_type == 0 else "手动回车模式")
 
-    MAX_ATTEMPTS = len(start_time) * len(config["ground_id"])
+    MAX_ATTEMPTS = len(start_time) * 3
     attempts = 0
 
     if args.re_type == 1:
@@ -97,7 +98,7 @@ if __name__ == "__main__":
             if time_difference > 10:
                 time.sleep(5)
             else:
-                time.sleep(0.05)
+                time.sleep(0.1)
             time_difference = (set_time - datetime.datetime.now()).total_seconds()
             print(
                 "==================距离设定时间还有: %s========================" % (set_time - datetime.datetime.now()))
@@ -105,6 +106,6 @@ if __name__ == "__main__":
     while attempts < MAX_ATTEMPTS:
         for reservation in reservations:
             reservation.post_single(config)
-            attempts += len(config["ground_id"])
+            attempts += 1
 
     print("预订结束，部分场次可能未预约成功，请手动检查。")
