@@ -1,0 +1,20 @@
+Index: .gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.pyc\r\npost_me.json
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.gitignore b/.gitignore
+--- a/.gitignore	
++++ b/.gitignore	
+@@ -1,2 +1,6 @@
+ .pyc
+-post_me.json
+\ No newline at end of file
++post_me.json
++.idea/workspace.xml
++*.iml
++.idea/
++.idea/profiles_settings.xml
+\ No newline at end of file

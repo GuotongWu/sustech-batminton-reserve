@@ -91,6 +91,8 @@ if __name__ == "__main__":
         input()
         time_difference = 0
     else:
+        print(
+            f"预定信息: customerName={config['customer_name']}, student_id={config['student_id']}, customer_tel={config['customer_tel']}")
         set_time = datetime.datetime.strptime(config["set_time"], "%Y-%m-%d %H:%M:%S")
         time_difference = (set_time - datetime.datetime.now()).total_seconds()
 
