@@ -53,20 +53,22 @@ class Reservation():
             re_data = json.loads(re.text)
             if re_data["success"]:
                 print(str(id) + "号场地预定成功！", "时间：" + self.start_time + "  -  " + self.end_time)
-                exit(0)
+                return True
             else:
                 print(str(id) + "号场地预定失败! ", "时间：" + self.start_time + "  -  " + self.end_time,
                       " 原因：" + re_data["msg"])
+                return False
         except requests.RequestException as e:
             print(f"请求错误: {e}")
+            return False
 
     def post_single(self, config):
         ground_ids = list(config["ground_id"].keys())
         random.shuffle(ground_ids)
         for ground_id in ground_ids:
-            time.sleep(random.uniform(1, 2))
-            self.post_reservation(config, int(ground_id))
-            time.sleep(random.uniform(1, 1.3))
+            time.sleep(1) # 可以根据需要更改间隔时间，为避免封号，请尽量使用较大间隔设定（>1s）
+            if self.post_reservation(config, int(ground_id)):
+                return
 
 
 if __name__ == "__main__":
@@ -81,7 +83,7 @@ if __name__ == "__main__":
 
     print("开始预定:", "固定时间模式" if args.re_type == 0 else "手动回车模式")
 
-    MAX_ATTEMPTS = len(start_time) * 3
+    # MAX_ATTEMPTS = len(start_time) * 3
     attempts = 0
 
     if args.re_type == 1:
@@ -96,18 +98,18 @@ if __name__ == "__main__":
         set_time = datetime.datetime.strptime(config["set_time"], "%Y-%m-%d %H:%M:%S")
         time_difference = (set_time - datetime.datetime.now()).total_seconds()
 
-        while time_difference > 0.1:
+        while time_difference > 0: # 超过设定时间不予预定，此处可以根据需要更改停止条件
             if time_difference > 10:
                 time.sleep(5)
             else:
-                time.sleep(0.1)
+                time.sleep(0.1) # 可以根据需要更改间隔时间
             time_difference = (set_time - datetime.datetime.now()).total_seconds()
             print(
-                "==================距离设定时间还有: %s========================" % (set_time - datetime.datetime.now()))
+                "==================距离设定时间还有: %.2f (s)========================" % (time_difference))
 
-    while attempts < MAX_ATTEMPTS:
-        for reservation in reservations:
-            reservation.post_single(config)
-            attempts += 1
+    # while attempts < MAX_ATTEMPTS:
+    for reservation in reservations:
+        reservation.post_single(config)
+        attempts += 1
 
     print("预订结束，部分场次可能未预约成功，请手动检查。")
